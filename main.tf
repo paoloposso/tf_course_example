@@ -343,7 +343,7 @@ resource "aws_instance" "web_server" {
 module "server" {
   source    = "./modules/server"
   ami       = data.aws_ami.ubuntu.id
-  size      = "t3.micro"
+  size      = "t2.nano"
   subnet_id = aws_subnet.public_subnets["public_subnet_3"].id
   security_groups = [
     aws_security_group.vpc-ping.id,
@@ -435,5 +435,15 @@ module "vpc" {
     Name        = "VPC from Module"
     Terraform   = "true"
     Environment = "dev"
+  }
+}
+
+# Terraform Resource Block - To Build EC2 instance in Public Subnet
+resource "aws_instance" "web_server_2" {
+  ami           = data.aws_ami.ubuntu.id
+  instance_type = "t2.nano"
+  subnet_id     = aws_subnet.public_subnets["public_subnet_2"].id
+  tags = {
+    Name = "Web EC2 Server"
   }
 }

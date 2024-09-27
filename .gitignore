@@ -1,6 +1,7 @@
-.terraform.lock.hcl
-.terraform
+# Ignore Terraform state files
 terraform.tfstate
 terraform.tfstate.backup
-.terraform.tfstate.lock.info
-terraform.tfstate.d
+
+# Ignore Terraform directory
+.terraform/
+*.pem
