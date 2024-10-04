@@ -5,3 +5,4 @@ terraform.tfstate.backup
 # Ignore Terraform directory
 .terraform/
 *.pem
+state_data/

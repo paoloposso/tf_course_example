@@ -3,7 +3,7 @@ provider "aws" {
   region = "us-east-1"
 }
 
-#Retrieve the list of AZs in the current AWS region
+# Retrieve the list of AZs in the current AWS region
 data "aws_availability_zones" "available" {}
 data "aws_region" "current" {}
 
@@ -17,7 +17,6 @@ data "aws_ami" "ubuntu_22_04" {
 
   owners = ["099720109477"]
 }
-
 
 data "aws_ami" "ubuntu" {
   most_recent = true
@@ -35,6 +34,12 @@ locals {
   team        = "api_mgmt_dev"
   application = "corp_api"
   server_name = "ec2-${var.environment}-api-${var.variables_sub_az}"
+}
+
+locals {
+  service_name = "Automation"
+  app_team     = "Cloud Team"
+  createdby    = "terraform"
 }
 
 #Define the VPC 
@@ -134,7 +139,6 @@ resource "aws_route_table_association" "private" {
   subnet_id      = each.value.id
 }
 
-#Create Internet Gateway
 resource "aws_internet_gateway" "internet_gateway" {
   vpc_id = aws_vpc.vpc.id
   tags = {
@@ -142,7 +146,6 @@ resource "aws_internet_gateway" "internet_gateway" {
   }
 }
 
-#Create EIP for NAT Gateway
 resource "aws_eip" "nat_gateway_eip" {
   # domain     = "vpc"
   depends_on = [aws_internet_gateway.internet_gateway]
@@ -331,7 +334,9 @@ resource "aws_instance" "web_server" {
   }
 
   tags = {
-    Name = "Web EC2 Server"
+    "Service"   = local.service_name
+    "AppTeam"   = local.app_team
+    "CreatedBy" = local.createdby
   }
 
   lifecycle {
